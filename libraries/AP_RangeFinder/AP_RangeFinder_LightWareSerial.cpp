@@ -35,19 +35,20 @@ bool AP_RangeFinder_LightWareSerial::get_reading(float &reading_m)
     float sum = 0;              // sum of all readings taken
     uint16_t valid_count = 0;   // number of valid readings
     uint16_t invalid_count = 0; // number of invalid readings
+    bool doread = false;
 
     // max distance the sensor can reliably measure - read from parameters
     const int16_t distance_cm_max = max_distance_cm();
 
     // read any available lines from the lidar
-    for (auto i=0; i<8192; i++) {
-        uint8_t c;
-        if (!uart->read(c)) {
-            break;
-        }
+    int16_t nbytes = uart->available();
+    while (nbytes-- > 0) {
+        char c = uart->read();
+
         // use legacy protocol
         if (protocol_state == ProtocolState::UNKNOWN || protocol_state == ProtocolState::LEGACY) {
-            if (c == '\r') {
+            if (c == '\r' || c == '\n') {
+                doread = false;
                 linebuf[linebuf_len] = 0;
                 const float dist = strtof(linebuf, nullptr);
                 if (!is_negative(dist) && !is_lost_signal_distance(dist * 100, distance_cm_max)) {
@@ -61,11 +62,21 @@ bool AP_RangeFinder_LightWareSerial::get_reading(float &reading_m)
                     invalid_count++;
                 }
                 linebuf_len = 0;
-            } else if (isdigit(c) || c == '.' || c == '-') {
-                linebuf[linebuf_len++] = c;
-                if (linebuf_len == sizeof(linebuf)) {
-                    // too long, discard the line
-                    linebuf_len = 0;
+            } else {
+                if(c == ' ' || c == 't'){
+                    doread = false;
+                }                
+                if(doread == true && c != ':' && c != ' '){
+                    if (isdigit(c) || c == '.' || c == '-') {                
+                            linebuf[linebuf_len++] = c;
+                            if (linebuf_len == sizeof(linebuf)) {
+                                // too long, discard the line
+                                linebuf_len = 0;
+                            }
+                        }
+                }
+                if(c == 'y' || c == 'H'){
+                    doread = true;
                 }
             }
         }

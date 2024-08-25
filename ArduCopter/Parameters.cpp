@@ -69,6 +69,31 @@ const AP_Param::Info Copter::var_info[] = {
     // @Increment: 10
     GSCALAR(pilot_takeoff_alt,  "PILOT_TKOFF_ALT",  PILOT_TKOFF_ALT_DEFAULT),
 
+
+
+        // @Param: TMINT
+    // @DisplayName: Radar Radical Mint
+    // @Description: Controls the radial mint of radar.
+    // @Range: 0 32767
+    // @User: Standard
+    GSCALAR(tmint, "TMINT", 0),
+
+    // @Param: TMEXT
+    // @DisplayName: Radar Radical Mext
+    // @Description: Controls the radial mext of radar.
+    // @Range: 0 32767
+    // @User: Standard
+    GSCALAR(tmext, "TMEXT", 0),
+
+
+    // @Param: GSINT
+    // @DisplayName: Global Radical Mint
+    // @Description: Controls the global mint of radar.
+    // @Range: 0 32767
+    // @User: Standard
+    GSCALAR(gsint, "GSINT", 0),
+
+
     // @Param: PILOT_THR_BHV
     // @DisplayName: Throttle stick behavior
     // @Description: Bitmask containing various throttle stick options. TX with sprung throttle can set PILOT_THR_BHV to "1" so motor feedback when landed starts from mid-stick instead of bottom of stick.

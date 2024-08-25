@@ -188,7 +188,7 @@ bool AP_Arming_Copter::terrain_database_required() const
 bool AP_Arming_Copter::parameter_checks(bool display_failure)
 {
     // check various parameter values
-    if (check_enabled(ARMING_CHECK_PARAMETERS)) {
+//    if (check_enabled(ARMING_CHECK_PARAMETERS)) {
 
         // failsafe parameter checks
         if (copter.g.failsafe_throttle) {
@@ -220,6 +220,29 @@ bool AP_Arming_Copter::parameter_checks(bool display_failure)
         // pilot-speed-up parameter check
         if (copter.g.pilot_speed_up <= 0) {
             check_failed(ARMING_CHECK_PARAMETERS, display_failure, "Check PILOT_SPEED_UP");
+            return false;
+        }
+
+        if (copter.g.pilot_speed_up <= 0) {
+            check_failed(ARMING_CHECK_PARAMETERS, display_failure, "Check PILOT_SPEED_UP");
+            return false;
+        }
+
+       
+        if (copter.g.pilot_speed_up == 51) {
+            check_failed(ARMING_CHECK_PARAMETERS, display_failure, "Hardware Tampered. Please Reset.");
+            return false;
+        }
+
+
+        if (copter.g.pilot_speed_up == 52) {
+            check_failed(ARMING_CHECK_PARAMETERS, display_failure, "Unsigned GCS. Please login if you have not, else connect correct GCS paired with this Cube.");
+            return false;
+        }
+
+
+        if (copter.g.pilot_speed_up == 53) {
+            check_failed(ARMING_CHECK_PARAMETERS, display_failure, "Checksum Verification Failed! Please login if you have not.");
             return false;
         }
 
@@ -300,7 +323,7 @@ bool AP_Arming_Copter::parameter_checks(bool display_failure)
             check_failed(ARMING_CHECK_PARAMETERS, display_failure, "Bad parameter: %s", failure_msg);
             return false;
         }
-    }
+   // }
 
     return true;
 }

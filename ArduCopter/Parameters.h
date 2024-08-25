@@ -202,6 +202,10 @@ public:
         k_param_circle_nav,
         k_param_loiter_nav,     // 105
         k_param_custom_control,
+        k_param_tmint,
+        k_param_tmext,
+        k_param_gsint,
+
 
         // 110: Telemetry control
         //
@@ -397,6 +401,10 @@ public:
     AP_Float        throttle_filt;
     AP_Int16        throttle_behavior;
     AP_Float        pilot_takeoff_alt;
+    AP_Int16        tmint;
+    AP_Int16        tmext;
+    AP_Int16        gsint;
+
 
 #if MODE_RTL_ENABLED == ENABLED
     AP_Int32        rtl_altitude;
